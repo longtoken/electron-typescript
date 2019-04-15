@@ -1,0 +1,11 @@
+.content-list {
+    margin-top: 20px;
+}
+
+.ant-popover-inner {
+    max-width: 900px
+}
+
+.wordBreak {
+    word-break: break-all;
+}

@@ -17,6 +17,8 @@ type State = {
 };
 type Actions = { type: 'FOO' } | { type: 'BAR', result: number };
 const middleware = [thunk as ThunkMiddleware<State, Actions>];*/
+import initAxios from './utils/axios'
+initAxios();
 
 const middleware = [thunk];
 // if (process.env.NODE_ENV !== 'production') {

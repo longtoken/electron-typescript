@@ -1,22 +1,110 @@
 import {
-    ADD_SELECT_LIST,
-    FETCH_SELECT_LIST_BEGIN,
-    FETCH_SELECT_LIST_FAILURE,
-    FETCH_SELECT_LIST_SUCCESS,
+  FETCH_RENDER_CONTENT_SUCCESS,
+  ACTIVE_SELECT,
+  ADD_SELECT_LIST,
+  FETCH_SELECT_LIST_BEGIN,
+  FETCH_SELECT_LIST_FAILURE,
+  FETCH_SELECT_LIST_SUCCESS,
 } from '../actionType'
 
-import {ActionCreator, AnyAction} from 'redux';
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
+import axios from 'axios'
+
+//import {ActionCreator, AnyAction} from 'redux';
+//import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 //export type Thunk = ThunkAction<void, AppState, null, AppAction>;
 //export type Dispatch<S> = ThunkDispatch<S, null, AppAction>;
 
 let initSelect = [];
 
-export const addSelectList = (value) => ({
+export const addSelectAction = (value) => {
+  initSelect.unshift({id: initSelect.length++, text: value});
+  return ({
     type: ADD_SELECT_LIST,
-    id: initSelect.length++,
-    text: value,
-});
+    selectList: initSelect
+  });
+};
+
+const data = [
+  {
+    key: 1,
+    account: '15898987777',
+    env: 'ci',
+    token: 'New York No. 1 Lake Park',
+    description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
+  }
+];
+let contentList = [];
+export const renderContent = (data, phone, env) => {
+  console.log(contentList,'aaaaaa');
+  contentList = [
+    {
+      key: contentList.length++,
+      account: phone,
+      env,
+      token: data.access_token,
+      description: data.access_token
+    }
+  ];
+  /*为什么用push会多一个empty
+  contentList.push({
+    key: contentList.length++,
+    account: phone,
+    env,
+    token: data.access_token,
+    description: data.access_token
+  });*/
+  console.log(contentList, 'axios=====');
+  return ({
+    type: FETCH_RENDER_CONTENT_SUCCESS,
+    json: contentList
+  });
+};
+
+export function addSelectList(value) {
+  return dispatch => {
+    dispatch(setActiveSelect(value));
+    dispatch(addSelectAction(value));
+  };
+}
+
+// mock
+let tokenList = {"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZjgwODA4MTY5NGNjNGMyMDE2YTBmMWFiMDM3MDAyMSIsImV4cCI6MTU1NTM1NzI2NCwidXNlcl9uYW1lIjoiMTM2Nzc3Nzc3NzMiLCJqdGkiOiI2MzEwMTNkOS0wZDRiLTQzMDQtODBkZi05NTIzN2IzMWJiYTUiLCJjbGllbnRfaWQiOiJhcHBfY29yZSIsInNjb3BlIjpbImFsbCJdfQ.VQDGAHP95DQ8Usmm7THBwIKmbR2onM-ewv2ns2_996JnIl9puCYITe2gwJd3ajdaWTL-IaN0dwmkcEI5Yarj6egDGmH1ZTb-ElR2I1zreO5hWgAjMmYvdERmerLI5Z27TEVUV6WXlTkS4GDoACU9Utv8b_E5NkX0KzjfZJIdlZs","token_type":"bearer","refresh_token":"631013d9-0d4b-4304-80df-95237b31bba5","expires_in":35999,"scope":"all"};
+export function getContentList(phone, environment) {
+  return dispatch => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        dispatch(renderContent(tokenList, phone, environment));
+      }, 100);
+    });
+  };
+}
+/*export function getContentList(phone, environment) {
+  return dispatch => {
+    if (environment !== 'pro') {
+      environment = `-${environment}`;
+    }
+    let url = `https://passport${environment}.crfchina.com/auth_server/client/simplelogin`;
+    let data = {
+      'accountName': phone,
+    };
+    let Authorization = environment ? 'Basic YXBwX2NvcmU6YXBwX2NvcmU=' : 'Basic YXBwX2NvcmU6UkxDTkhYdGZFaThOaG9HSw==';
+    let config = {
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': Authorization
+      }
+    };
+    axios.post(url, data, config)
+      .then((response) => {
+        dispatch(renderContent(response, phone, environment));
+        console.log(response);
+      })
+      .catch((error) => {
+
+        console.log(error);
+      });
+  };
+}*/
 
 
 /*export const fetchSelectList: ActionCreator<
@@ -36,42 +124,47 @@ export const addSelectList = (value) => ({
 }*/
 
 export function fetchSelectList() {
-    return dispatch => {
-        dispatch(fetchSelectListBegin());
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                let json = [
-                    {"id": 0, "text": "ci"},
-                    {"id": 1, "text": "uat"},
-                    {"id": 2, "text": "uata"}
-                ];
-                initSelect = json;
-                dispatch(fetchSelectListSuccess(json));
-            }, 100);
-        });
-        /*return fetch('../mock/selectList.json')
-            .then(res => res.json())
-            .then(json => {
-                dispatch(fetchSelectListSuccess(json));
-                initSelect = json;//ke
-                return json;
-            })
-            .catch(error => dispatch(fetchSelectListFailure(error)));*/
-    };
+  return dispatch => {
+    dispatch(fetchSelectListBegin());
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        let json = [
+          {"id": 0, "text": "ci"},
+          {"id": 1, "text": "uat"},
+          {"id": 2, "text": "uata"}
+        ];
+        initSelect = json;
+        dispatch(setActiveSelect(json[0].text));
+        dispatch(fetchSelectListSuccess(json));
+      }, 100);
+    });
+    /*return fetch('../mock/selectList.json')
+        .then(res => res.json())
+        .then(json => {
+            dispatch(fetchSelectListSuccess(json));
+            initSelect = json;//ke
+            return json;
+        })
+        .catch(error => dispatch(fetchSelectListFailure(error)));*/
+  };
 }
 
 export const fetchSelectListBegin = () => ({
-    type: FETCH_SELECT_LIST_BEGIN
+  type: FETCH_SELECT_LIST_BEGIN
 });
 
 export const fetchSelectListSuccess = json => ({
-    type: FETCH_SELECT_LIST_SUCCESS,
-    selectList: json
+  type: FETCH_SELECT_LIST_SUCCESS,
+  selectList: json
 });
 
 export const fetchSelectListFailure = error => ({
-    type: FETCH_SELECT_LIST_FAILURE,
-    error
+  type: FETCH_SELECT_LIST_FAILURE,
+  error
 });
 
+export const setActiveSelect = value => ({
+  type: ACTIVE_SELECT,
+  value
+});
 
