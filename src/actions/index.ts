@@ -35,8 +35,8 @@ const data = [
 ];
 let contentList = [];
 export const renderContent = (data, phone, env) => {
-  console.log(contentList,'aaaaaa');
-  contentList = [
+  console.log(contentList,contentList.length,'aaaaaa');
+  /*contentList = [
     {
       key: contentList.length++,
       account: phone,
@@ -44,16 +44,20 @@ export const renderContent = (data, phone, env) => {
       token: data.access_token,
       description: data.access_token
     }
-  ];
-  /*为什么用push会多一个empty
-  contentList.push({
+  ];*/
+  //为什么用push会多一个empty
+  let item = {
     key: contentList.length++,
     account: phone,
     env,
     token: data.access_token,
     description: data.access_token
-  });*/
-  console.log(contentList, 'axios=====');
+  };
+  if (item.token) {
+    contentList.push(item);
+    console.log(contentList, contentList.length,'axios=====');
+  }
+
   return ({
     type: FETCH_RENDER_CONTENT_SUCCESS,
     json: contentList
