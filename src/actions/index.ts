@@ -46,21 +46,27 @@ export const renderContent = (data, phone, env) => {
     }
   ];*/
   //为什么用push会多一个empty
+  let cpContentList = JSON.parse(JSON.stringify(contentList));
   let item = {
-    key: contentList.length++,
+    key: cpContentList.length++,
     account: phone,
     env,
     token: data.access_token,
     description: data.access_token
   };
   if (item.token) {
+    cpContentList.push(item);
     contentList.push(item);
-    console.log(contentList, contentList.length,'axios=====');
+    console.log(cpContentList, cpContentList.length,'axios=====');
   }
-
+  for (let i = 0; i < cpContentList.length; i++) {
+    if (!cpContentList[i]) {
+      cpContentList.splice(i,1);
+    }
+  }
   return ({
     type: FETCH_RENDER_CONTENT_SUCCESS,
-    json: contentList
+    json: cpContentList
   });
 };
 

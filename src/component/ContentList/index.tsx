@@ -48,21 +48,21 @@ class ContentList extends React.Component<Props> {
   }
 
   renderList(item) {
-    return <div className="content-link" key={item.key}>
-      <a href="javascript:;">{item.link}</a>
-    </div>
+    return <p className="content-link" key={item.key}>
+      <a href={item.link}>{item.name}</a>
+    </p>
   }
 
   render() {
     let {data} = this.props;
-    console.log(JSON.stringify(data),data, '-----====+++++');
+    console.log(JSON.stringify(data),data, '-----====+++++ 更新');
     return (
       <section className="content-list">
         <Table
           columns={columns}
-          expandedRowRender={record => <p style={{margin: 0}}>
+          expandedRowRender={record => <div style={{margin: 0}}>
             { this.getLinks(record.description).map(this.renderList.bind(this)) }
-          </p>}
+          </div>}
           dataSource={data}
         />
       </section>
