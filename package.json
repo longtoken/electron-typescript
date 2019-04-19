@@ -2,6 +2,9 @@
   "name": "tsc-antd-electron",
   "version": "0.1.0",
   "private": true,
+  "main": "electronEntry.js",
+  "homepage": ".",
+  "DEV": 1,
   "dependencies": {
     "@types/jest": "24.0.11",
     "@types/node": "11.13.0",
@@ -12,6 +15,7 @@
     "Base64": "^1.0.2",
     "antd": "^3.16.1",
     "axios": "^0.18.0",
+    "electron": "^4.1.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^6.0.1",
@@ -25,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "elec-start": "electron .",
+    "elec-pack": "electron-packager . tsClient --win --out ../tsClient --arch=x64 --app-version=0.0.1 --electron-version=2.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"

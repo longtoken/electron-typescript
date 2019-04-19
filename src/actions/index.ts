@@ -1,5 +1,6 @@
 import {
   FETCH_RENDER_CONTENT_SUCCESS,
+  DELETE_CONTENT,
   ACTIVE_SELECT,
   ADD_SELECT_LIST,
   FETCH_SELECT_LIST_BEGIN,
@@ -35,7 +36,7 @@ const data = [
 ];
 let contentList = [];
 export const renderContent = (data, phone, env) => {
-  console.log(contentList,contentList.length,'aaaaaa');
+  console.log(contentList, contentList.length, 'aaaaaa');
   /*contentList = [
     {
       key: contentList.length++,
@@ -52,16 +53,22 @@ export const renderContent = (data, phone, env) => {
     account: phone,
     env,
     token: data.access_token,
-    description: data.access_token
+    description: data.access_token,
+    del: phone
   };
-  if (item.token) {
-    cpContentList.push(item);
-    contentList.push(item);
-    console.log(cpContentList, cpContentList.length,'axios=====');
-  }
+
+  cpContentList.push(item);
+  contentList.push(item);
+  console.log(contentList, cpContentList, 'axios=====');
+
   for (let i = 0; i < cpContentList.length; i++) {
     if (!cpContentList[i]) {
-      cpContentList.splice(i,1);
+      cpContentList.splice(i, 1);
+    }
+  }
+  for (let i = 0; i < contentList.length; i++) {
+    if (!contentList[i]) {
+      contentList.splice(i, 1);
     }
   }
   return ({
@@ -69,6 +76,21 @@ export const renderContent = (data, phone, env) => {
     json: cpContentList
   });
 };
+
+export const deleteContentItem = (phone) => {
+
+  for (let i = 0; i < contentList.length; i++) {
+    if (contentList[i].account === phone) {
+      contentList.splice(i, 1);
+    }
+  }
+  console.log(phone, '----', contentList);
+  return ({
+    type: DELETE_CONTENT,
+    json: contentList
+  });
+};
+
 
 export function addSelectList(value) {
   return dispatch => {
@@ -78,7 +100,14 @@ export function addSelectList(value) {
 }
 
 // mock
-let tokenList = {"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZjgwODA4MTY5NGNjNGMyMDE2YTBmMWFiMDM3MDAyMSIsImV4cCI6MTU1NTM1NzI2NCwidXNlcl9uYW1lIjoiMTM2Nzc3Nzc3NzMiLCJqdGkiOiI2MzEwMTNkOS0wZDRiLTQzMDQtODBkZi05NTIzN2IzMWJiYTUiLCJjbGllbnRfaWQiOiJhcHBfY29yZSIsInNjb3BlIjpbImFsbCJdfQ.VQDGAHP95DQ8Usmm7THBwIKmbR2onM-ewv2ns2_996JnIl9puCYITe2gwJd3ajdaWTL-IaN0dwmkcEI5Yarj6egDGmH1ZTb-ElR2I1zreO5hWgAjMmYvdERmerLI5Z27TEVUV6WXlTkS4GDoACU9Utv8b_E5NkX0KzjfZJIdlZs","token_type":"bearer","refresh_token":"631013d9-0d4b-4304-80df-95237b31bba5","expires_in":35999,"scope":"all"};
+let tokenList = {
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZjgwODA4MTY5NGNjNGMyMDE2YTBmMWFiMDM3MDAyMSIsImV4cCI6MTU1NTM1NzI2NCwidXNlcl9uYW1lIjoiMTM2Nzc3Nzc3NzMiLCJqdGkiOiI2MzEwMTNkOS0wZDRiLTQzMDQtODBkZi05NTIzN2IzMWJiYTUiLCJjbGllbnRfaWQiOiJhcHBfY29yZSIsInNjb3BlIjpbImFsbCJdfQ.VQDGAHP95DQ8Usmm7THBwIKmbR2onM-ewv2ns2_996JnIl9puCYITe2gwJd3ajdaWTL-IaN0dwmkcEI5Yarj6egDGmH1ZTb-ElR2I1zreO5hWgAjMmYvdERmerLI5Z27TEVUV6WXlTkS4GDoACU9Utv8b_E5NkX0KzjfZJIdlZs",
+  "token_type": "bearer",
+  "refresh_token": "631013d9-0d4b-4304-80df-95237b31bba5",
+  "expires_in": 35999,
+  "scope": "all"
+};
+
 export function getContentList(phone, environment) {
   return dispatch => {
     return new Promise((resolve, reject) => {
@@ -88,6 +117,7 @@ export function getContentList(phone, environment) {
     });
   };
 }
+
 /*export function getContentList(phone, environment) {
   return dispatch => {
     if (environment !== 'pro') {

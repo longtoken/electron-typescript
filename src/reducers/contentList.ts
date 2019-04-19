@@ -1,4 +1,5 @@
 import {
+  DELETE_CONTENT,
   FETCH_RENDER_CONTENT_SUCCESS,
 } from '../actionType'
 
@@ -16,7 +17,12 @@ export default function contentList(state = initialState, action) {
         ...state,
         list: action.json
       };
-
+    case DELETE_CONTENT:
+      console.log(action.json);
+      return {
+        ...state,
+        list: action.json
+      };
     default:
       return state;
   }

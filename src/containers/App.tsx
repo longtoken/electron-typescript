@@ -17,8 +17,10 @@ import {
   fetchSelectList,
   addSelectList,
   setActiveSelect,
-  getContentList,
+  getContentList, deleteContentItem,
 } from '../actions';
+
+import Base64 from 'Base64'
 
 type SelectList = {
   items: any[];
@@ -38,6 +40,14 @@ interface AppProps {
   dispatch: ThunkDispatch<SelectList, any, AnyAction>;
 }
 
+const content = (e) => {
+  return (
+    <div>
+      <p className="wordBreak">{Base64.atob(e)}</p>
+      <p className="wordBreak">{e}</p>
+    </div>
+  );
+};
 
 class App extends Component<AppProps> {
   constructor(props: AppProps) {
@@ -48,10 +58,24 @@ class App extends Component<AppProps> {
   state = {
     visible: false,
   }
+  columns = [
+    {title: '用户', dataIndex: 'account', key: 'account'},
+    {title: '环境', dataIndex: 'env', key: 'env'},
+    {title: 'token', dataIndex: 'token', key: 'token', render: (e) => <Popover content={content(e)} title="Title" trigger="click" placement="bottom">
+        <Button>查看token</Button>
+      </Popover>},
+    {
+      title: 'Action', dataIndex: 'del', key: 'del', render: (e) => <Button type="danger" onClick={this.deleteItem.bind(this,e)}>删除</Button>,
+    },
+  ]
 
   InputValue: null
   InputPhone: null
 
+  deleteItem(e) {
+    console.log('11');
+    this.props.dispatch(deleteContentItem(e))
+  }
   componentDidMount(): void {
     this.props.dispatch(fetchSelectList());
   }
@@ -120,6 +144,7 @@ class App extends Component<AppProps> {
         </header>
         <ContentList
           data={contentData}
+          columns={this.columns}
         />
       </div>
     );

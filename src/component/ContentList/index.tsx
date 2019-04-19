@@ -6,30 +6,12 @@ import Popover from 'antd/lib/popover';
 import Button from 'antd/lib/button';
 import message from 'antd/lib/message';
 
-import Base64 from 'Base64'
+
 
 interface Props {
   data: any[];
+  columns: any[];
 }
-
-const content = (e) => {
-  return (
-    <div>
-      <p className="wordBreak">{Base64.atob(e)}</p>
-      <p className="wordBreak">{e}</p>
-    </div>
-  );
-};
-const columns = [
-  {title: '用户', dataIndex: 'account', key: 'account'},
-  {title: '环境', dataIndex: 'env', key: 'env'},
-  {title: 'token', dataIndex: 'token', key: 'token', render: (e) => <Popover content={content(e)} title="Title" trigger="click" placement="bottom">
-      <Button>查看token</Button>
-    </Popover>},
-  {
-    title: 'Action', dataIndex: '', key: 'x', render: () => <a href="javascript:;">Delete</a>,
-  },
-];
 
 const links = [
   {key:0, name: '分期借款', link:'https://apply-static-uat.crfchina.com/xfd_shop_mpa/static/index.html'},
@@ -54,7 +36,7 @@ class ContentList extends React.Component<Props> {
   }
 
   render() {
-    let {data} = this.props;
+    let {data, columns} = this.props;
     console.log(JSON.stringify(data),data, '-----====+++++ 更新');
     return (
       <section className="content-list">
