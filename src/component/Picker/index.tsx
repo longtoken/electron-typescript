@@ -18,9 +18,8 @@ class Picker extends React.Component<PickerProps> {
   }
 
   render() {
-    let {onChange, options, value} = this.props;
+    let {onChange, options = [], value} = this.props;
 
-    console.log(options, '---options Picker', options[0], value);
     return (
       <Select
         onChange={(value: string) => onChange(value)}
@@ -28,7 +27,7 @@ class Picker extends React.Component<PickerProps> {
         value={value}
         onSelect={this.onSelect}
       >
-        {options && options.length && options.map((item: any) =>
+        {options.map((item: any) =>
           <Option key={item.id} value={item.text}>{item.text}</Option>
         )}
       </Select>

@@ -3,6 +3,7 @@ node_modules
 dist
 .cue
 .idea
+build
 # local env files
 .env.local
 .env.*.local
@@ -20,4 +21,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+*.rar
 /package-lock.json

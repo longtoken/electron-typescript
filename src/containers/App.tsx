@@ -15,12 +15,13 @@ import Icon from 'antd/lib/icon';
 import Popover from 'antd/lib/popover';
 import {
   fetchSelectList,
-  addSelectList,
+  addSelectListItem,
   setActiveSelect,
-  getContentList, deleteContentItem,
+  getContentList,
+  deleteContentItem,
 } from '../actions';
 
-import Base64 from 'Base64'
+// import Base64 from 'Base64'
 
 type SelectList = {
   items: any[];
@@ -40,11 +41,11 @@ interface AppProps {
   dispatch: ThunkDispatch<SelectList, any, AnyAction>;
 }
 
-const content = (e) => {
+const content = (result) => {
   return (
-    <div>
-      <p className="wordBreak">{Base64.atob(e)}</p>
-      <p className="wordBreak">{e}</p>
+    <div className="item">
+      <p className="wordBreak">{result.id}</p>
+      <p className="wordBreak">{JSON.stringify(result)}</p>
     </div>
   );
 };
@@ -61,27 +62,36 @@ class App extends Component<AppProps> {
   columns = [
     {title: '用户', dataIndex: 'account', key: 'account'},
     {title: '环境', dataIndex: 'env', key: 'env'},
-    {title: 'token', dataIndex: 'token', key: 'token', render: (e) => <Popover content={content(e)} title="Title" trigger="click" placement="bottom">
-        <Button>查看token</Button>
-      </Popover>},
     {
-      title: 'Action', dataIndex: 'del', key: 'del', render: (e) => <Button type="danger" onClick={this.deleteItem.bind(this,e)}>删除</Button>,
+      title: 'token',
+      dataIndex: 'token',
+      key: 'token',
+      render: (e) => <Popover content={content(e)} title="Title" trigger="click" placement="bottom">
+        <Button>查看token</Button>
+      </Popover>
+    },
+    {
+      title: 'Action',
+      dataIndex: 'del',
+      key: 'del',
+      render: (e) => <Button type="danger" onClick={this.deleteItem.bind(this, e.id)}>删除</Button>,
     },
   ]
 
   InputValue: null
   InputPhone: null
 
-  deleteItem(e) {
-    console.log('11');
-    this.props.dispatch(deleteContentItem(e))
+  deleteItem(id) {
+    console.log(id);
+    this.props.dispatch(deleteContentItem(id))
   }
+
   componentDidMount(): void {
     this.props.dispatch(fetchSelectList());
   }
 
   addSelectList = () => {
-    this.props.dispatch(addSelectList(this.InputValue));
+    this.props.dispatch(addSelectListItem(this.InputValue));
     this.setState({
       visible: false,
     });
@@ -113,7 +123,7 @@ class App extends Component<AppProps> {
 
   render() {
     let {activeSelect, allData, loading, contentData} = this.props;
-    console.log(activeSelect, allData, 'render');
+
     if (loading) {
       return <div>loading...</div>
     }
@@ -130,7 +140,6 @@ class App extends Component<AppProps> {
           <div className="add-select">
             <Popover
               content={<Button className="customAdd" type="primary" onClick={this.addSelectList}>使用自定义环境</Button>}
-              //title={<input type="text" ref={node => this.inputAdd = node}/>}
               title={<Input allowClear onChange={this.InputChange}/>}
               trigger="click"
               visible={this.state.visible}
@@ -152,13 +161,13 @@ class App extends Component<AppProps> {
 }
 
 const mapStateToProps = state => {
-  console.log(state, '---- App.tsx');
+  //console.log(state, '---- App.tsx');
   return ({
-    allData: state.allData.items,
-    contentData: state.contentData.list,
-    activeSelect: state.allData.activeSelect,
-    loading: state.allData.loading,
-    error: state.allData.error,
+    allData: state.allData,
+    contentData: state.contentData,
+    activeSelect: state.activeSelect,
+    loading: false,
+    error: false,
   })
 };
 
