@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {Action, Dispatch, AnyAction} from 'redux';
 import {ThunkDispatch} from 'redux-thunk';
 
@@ -50,7 +50,7 @@ const content = (result) => {
   );
 };
 
-class App extends Component<AppProps> {
+class App extends PureComponent<AppProps> {
   constructor(props: AppProps) {
     super(props);
     this.submit = this.submit.bind(this);
@@ -67,7 +67,7 @@ class App extends Component<AppProps> {
       dataIndex: 'token',
       key: 'token',
       render: (e) => <Popover content={content(e)} title="Title" trigger="click" placement="bottom">
-        <Button>查看token</Button>
+        <Button>查看信息</Button>
       </Popover>
     },
     {
@@ -123,7 +123,7 @@ class App extends Component<AppProps> {
 
   render() {
     let {activeSelect, allData, loading, contentData} = this.props;
-
+console.log('---render app');
     if (loading) {
       return <div>loading...</div>
     }

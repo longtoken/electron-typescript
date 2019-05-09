@@ -1,4 +1,4 @@
-import React from "react";
+import React, {PureComponent} from "react";
 import './index.css';
 
 import Select from 'antd/lib/select';
@@ -12,14 +12,14 @@ interface PickerProps {
 }
 
 //onChange={(e:HTMLElementEvent<HTMLSelectElement>) => onChange(e.target.value)}
-class Picker extends React.Component<PickerProps> {
+class Picker extends PureComponent<PickerProps> {
   onSelect(value) {
     console.log(value)
   }
 
   render() {
     let {onChange, options = [], value} = this.props;
-
+console.log('---render picker');
     return (
       <Select
         onChange={(value: string) => onChange(value)}

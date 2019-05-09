@@ -1,4 +1,4 @@
-import React from "react";
+import React, {PureComponent} from "react";
 import './index.css';
 
 import Table from 'antd/lib/table';
@@ -11,7 +11,7 @@ interface Props {
   columns: any[];
 }
 
-class ContentList extends React.Component<Props> {
+class ContentList extends PureComponent<Props> {
 
   getLinks(token) {
     const links = [
@@ -32,6 +32,7 @@ class ContentList extends React.Component<Props> {
 
   render() {
     let {data, columns} = this.props;
+    console.log('---render content list');
     return (
       <section className="content-list">
         <Table
